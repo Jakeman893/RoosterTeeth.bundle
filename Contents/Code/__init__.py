@@ -5,42 +5,54 @@ ART   = 'art-default.jpg'
 ICON  = 'icon-default.png'
 BASE_URL = 'http://roosterteeth.com'
 HTTP_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/536.30.1 (KHTML, like Gecko) Version/6.0.5 Safari/536.30.1'
+SERIES_URL = "https://roosterteeth.com/series?"
+
 
 CHANNELS = [
     {
         'title': 'Rooster Teeth',
-        'url': 'http://roosterteeth.com/show',
+        'url': 'rooster-teeth',
         'image': 'https://pbs.twimg.com/profile_images/699276126644936704/rCkvY0SS_400x400.jpg'
     },
     {
         'title': 'Achievement Hunter',
-        'url': 'http://achievementhunter.roosterteeth.com/show',
+        'url': 'achievement-hunter',
         'image': 'https://pbs.twimg.com/profile_images/1834741417/283025_10150250994985698_268895495697_7664630_357027_n_400x400.jpg'
     },
     {
         'title': 'Funhaus',
-        'url': 'http://funhaus.roosterteeth.com/show',
+        'url': 'funhaus',
         'image': 'https://pbs.twimg.com/profile_images/563456577076596737/kTHggklU_400x400.png'
     },
     {
         'title': 'ScrewAttack',
-        'url': 'http://screwattack.roosterteeth.com/show',
+        'url': 'screwattack',
         'image': 'https://pbs.twimg.com/profile_images/735516290773704704/gJZmqxDZ_400x400.jpg'
     },
     {
         'title': 'Game Attack',
-        'url': 'http://gameattack.roosterteeth.com/show',
+        'url': 'game-attack',
         'image': 'https://pbs.twimg.com/profile_images/783404372323475456/A3XK5iD7_400x400.jpg'
     },
     {
         'title': 'The Know',
-        'url': 'http://theknow.roosterteeth.com/show',
+        'url': 'the-know',
         'image': 'https://pbs.twimg.com/profile_images/639837776934891520/WA-rAvdP_400x400.png'
     },
     {
         'title': 'Cow Chop',
-        'url': 'http://cowchop.roosterteeth.com/show',
+        'url': 'cow-chop',
         'image': 'https://pbs.twimg.com/profile_images/671530901734473728/CfowRP9t_400x400.png'
+    },
+    {
+        'title': 'Sugar Pine 7',
+        'url': 'sugar-pine-7',
+        'image': ''
+    },
+    {
+        'title': 'JT Music',
+        'url': 'jt-music',
+        'image': ''
     }
 ]
 

@@ -105,13 +105,16 @@ def MainMenu():
 @route('/video/roosterteeth/Shows')
 def Shows(url, title):
 
+    url = SERIES_URL + url
     oc = ObjectContainer(title2=title)
-
+    
     shows       = []
     showNames   = []
 
     # Add shows by parsing the site
     element = HTML.ElementFromURL(url)
+
+    print(element)
 
     for item in element.xpath("//*[@class = 'square-blocks']//a"):
         show = {}

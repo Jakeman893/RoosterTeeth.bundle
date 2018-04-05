@@ -114,7 +114,7 @@ def Shows(url, title):
     # Add shows by parsing the site
     element = HTML.ElementFromURL(url)
 
-    print(element)
+    Log(element)
 
     for item in element.xpath("//*[@class = 'square-blocks']//a"):
         show = {}

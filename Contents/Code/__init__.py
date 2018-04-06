@@ -122,7 +122,7 @@ def Shows(url, title):
     for item in element.xpath('//div[contains (@class, "card-image-wrapper")]'):
         show = {}
         try:
-            Log.Info("%s" % item, True)
+            Log.Info("Hello", True)
             show["url"] = item.xpath("./@href")[0]
             show["img"] = item.xpath(".//img/@src")[0]
 

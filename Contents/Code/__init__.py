@@ -119,21 +119,22 @@ def Shows(url, title):
 
     Log.Info("%s" %element, True)
 
-    for item in element.xpath("//*[@class = 'square-blocks']//a"):
+    for item in element.xpath('//div[contains (@class, "card-image-wrapper")]'):
         show = {}
         try:
+            Log.Info("%s" %item, True)
             show["url"] = item.xpath("./@href")[0]
             show["img"] = item.xpath(".//img/@src")[0]
 
             if show["img"].startswith("//"):
                 show["img"] = 'http:' + show["img"]
 
-            show["name"] = item.xpath(".//*[@class='name']/text()")[0]
-            show["desc"] = item.xpath(".//*[@class='post-stamp']/text()")[0]
+            # show["name"] = item.xpath(".//*[@class='name']/text()")[0]
+            # show["desc"] = item.xpath(".//*[@class='post-stamp']/text()")[0]
 
-            if not show["name"] in showNames:
-                showNames.append(show["name"])
-                shows.append(show)
+            # if not show["name"] in showNames:
+                # showNames.append(show["name"])
+                # shows.append(show)
         except:
             pass     
 

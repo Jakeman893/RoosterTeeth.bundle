@@ -114,15 +114,15 @@ def Shows(url, title):
     # Add shows by parsing the site
     element = HTML.ElementFromURL(url)
 
-    Log.Info("The url is %s" % url, True)
-    Log.Info("The series url is %s" % SERIES_URL, True)
+    # Log.Info("The url is %s" % url, True)
+    # Log.Info("The series url is %s" % SERIES_URL, True)
 
     # Log.Info(str(element), True)
 
     for item in element.xpath('//div[contains (@class, "card-image-wrapper")]'):
         show = {}
         try:
-            Log.Info("%s" %item, True)
+            Log.Info("%s" % item, True)
             show["url"] = item.xpath("./@href")[0]
             show["img"] = item.xpath(".//img/@src")[0]
 

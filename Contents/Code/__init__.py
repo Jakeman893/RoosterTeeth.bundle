@@ -105,7 +105,7 @@ def MainMenu():
 @route('/video/roosterteeth/Shows')
 def Shows(url, title):
 
-    url = SERIES_URL + url
+    url = SERIES_URL + "channel_id=" + url
     oc = ObjectContainer(title2=title)
     
     shows       = []

@@ -1,6 +1,6 @@
 from config import *
-
-Login = SharedCodeService.roosterteeth.Login
+from requirements_plex import api
+from api_functs import *
 
 ##########################################################################################
 def Start():
@@ -39,7 +39,7 @@ def MainMenu():
     for channel in CHANNELS:
         oc.add(
             DirectoryObject(
-                key = Callback(Shows, url=channel['url'], title=channel['title']),
+                key = Callback(Shows, channel=channel['title']),
                 title = channel['title'],
                 thumb = channel['image']
             )
@@ -49,61 +49,27 @@ def MainMenu():
 
 ##########################################################################################
 @route('/video/roosterteeth/Shows')
-def Shows(url, title):
-
-    url = SERIES_URL + "channel_id=" + url
-    oc = ObjectContainer(title2=title)
+def Shows(channel):
+    oc = ObjectContainer(title2=channel)
     
-    shows       = []
-    showNames   = []
+    Log.Info("Getting shows for %s." % channel)
 
-    # Add shows by parsing the site
-    element = HTML.ElementFromURL(url)
+    channel = channel.replace(" ", "")
 
-    # Log.Info("The url is %s" % url, True)
-    # Log.Info("The series url is %s" % SERIES_URL, True)
+    shows = get_shows(api, channel=channel)
 
-    # Log.Info(str(element), True)
-
-    Log.Info("Hello", True)
-
-    for item in element.xpath('//div[contains (@class, "card-image-wrapper")]'):
-        show = {}
-        try:
-            Log.Info("Hello", True)
-            show["url"] = item.xpath("./@href")[0]
-            show["img"] = item.xpath(".//img/@src")[0]
-
-            if show["img"].startswith("//"):
-                show["img"] = 'http:' + show["img"]
-
-            # show["name"] = item.xpath(".//*[@class='name']/text()")[0]
-            # show["desc"] = item.xpath(".//*[@class='post-stamp']/text()")[0]
-
-            # if not show["name"] in showNames:
-                # showNames.append(show["name"])
-                # shows.append(show)
-        except:
-            pass     
-
-    sortedShows = sorted(shows, key=lambda show: show["name"])
-    for show in sortedShows:
-
-        if show["name"] in ('RT Sponsor Cut'):
-            if not (Prefs['login'] and Prefs['username'] and Prefs['password']):
-                continue
-
+    for show in show:
         oc.add(
             DirectoryObject(
                 key = Callback(
                     EpisodeCategories, 
-                    title = show["name"],
-                    url = show["url"], 
-                    thumb = show["img"]
+                    title = None, #show["name"],
+                    url = None, #show["url"], 
+                    thumb = None #show["img"]
                 ), 
-                title = show["name"],
-                summary = show["desc"],
-                thumb = show["img"]
+                title = show.name,
+                summary = show.summary,
+                thumb = show.thumbnail
             )
         )
 

@@ -8,8 +8,6 @@ def Start():
     ObjectContainer.title1     = TITLE
     ObjectContainer.art        = R(ART)
 
-    HTTP.CacheTime  = CACHE_1HOUR
-    HTTP.User_Agent = HTTP_USER_AGENT
 
 ###################################################################################################
 def ValidatePrefs():

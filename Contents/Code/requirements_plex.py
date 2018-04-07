@@ -8,7 +8,7 @@ def get_shared_libraries_path():
     for path in sys.path:
         if path.endswith(expected) and 'System.bundle' not in path:
             return path+os.sep
-    bundle_path = Core.bundle_path
+    bundle_path = os.path.abspath("../")
     if not os.path.isdir(bundle_path):
         raise OSError(2, 'Bundle path not detected correctly, please fix it in js2py_plex.py!', bundle_path)
     libraries_path = os.path.join(bundle_path, 'Contents', 'Libraries', 'Shared')

@@ -1,0 +1,9 @@
+[submodule "Contents/Libraries/Shared/pyjsparser"]
+	path = Contents/Libraries/Shared/pyjsparser
+	url = https://github.com/PiotrDabkowski/pyjsparser.git
+[submodule "Contents/Libraries/Shared/six"]
+	path = Contents/Libraries/Shared/six
+	url = https://github.com/benjaminp/six.git
+[submodule "Contents/Libraries/Shared/Js2Py"]
+	path = Contents/Libraries/Shared/Js2Py
+	url = https://github.com/PiotrDabkowski/Js2Py.git

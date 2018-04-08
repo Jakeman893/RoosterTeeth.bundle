@@ -31,3 +31,9 @@
 [submodule "Contents/Libraries/Shared/vcrpy"]
 	path = Contents/Libraries/Shared/vcrpy
 	url = https://github.com/kevin1024/vcrpy.git
+[submodule "Contents/Code/Contents/Libraries/Shared/urllib3"]
+	path = Contents/Code/Contents/Libraries/Shared/urllib3
+	url = git://github.com/shazow/urllib3.git
+[submodule "Contents/Libraries/Shared/urllib3"]
+	path = Contents/Libraries/Shared/urllib3
+	url = git://github.com/shazow/urllib3.git

@@ -54,22 +54,25 @@ def Shows(channel):
 
     channel = channel.replace(" ", "")
 
-    shows = get_shows(api, channel=channel)
+    try:
+        shows = get_shows(api, channel=channel)
 
-    for show in shows:
-        oc.add(
-            DirectoryObject(
-                key = Callback(
-                    EpisodeCategories, 
-                    title = None, #show["name"],
-                    url = None, #show["url"], 
-                    thumb = None #show["img"]
-                ), 
-                title = show.name,
-                summary = show.summary,
-                thumb = show.thumbnail
+        for show in shows:
+            oc.add(
+                DirectoryObject(
+                    key = Callback(
+                        ShowEpisodes, 
+                        show = show.name,
+                        id = show.id,
+                        thumb = show.thumbnail
+                    ), 
+                    title = show.name,
+                    summary = show.summary,
+                    thumb = show.thumbnail
+                )
             )
-        )
+    except:
+        pass
 
     if len(oc) < 1:
         oc.header  = "Sorry"
@@ -78,75 +81,49 @@ def Shows(channel):
     return oc
 
 ##########################################################################################
-@route("/video/roosterteeth/EpisodeCategories")
-def EpisodeCategories(title, url, thumb):
+@route("/video/roosterteeth/ShowEpisodes")
+def ShowEpisodes(show, id, thumb):
 
-    oc = ObjectContainer(title2=title)
+    oc = ObjectContainer(title2=show)
 
-    content = HTTP.Request(url).content
+    Log.Info("Getting episodes for %s." % show)
 
-    if 'Sponsor Only Content' in content:
-        if not (Prefs['login'] and Prefs['username'] and Prefs['password']):
-            return ObjectContainer(header="Sponsor Only", message="This show contains sponsor only content.\r\nPlease login to access this show")
-
-    element = HTML.ElementFromString(content)
-
-    try:
-        art = element.xpath("//*[@class='cover-image']/@style")[0].split("(")[1].split(")")[0]
-
-        if art.startswith("//"):
-            art = 'http:' + art 
-    except:
-        art = None
+    seasons = get_seasons(api, show_id=id)
 
     # Fetch seasons    
-    for item in element.xpath("//*[@id='tab-content-episodes']//*[@class='accordion']//label"):
-        id = item.xpath("./@for")[0]
+    for season in seasons:
+        title = "Season " + season.number
 
-        if not id:
-            continue
-
-        try:
-            season = id.split(" ")[1]
-        except:
-            season = None
-
-        title = item.xpath(".//*[@class='title']/text()")[0]
-
-        oc.add(
-            DirectoryObject(
-                key = Callback(
-                    Items, 
-                    title = title, 
-                    url = url, 
-                    thumb = thumb,
-                    xpath_string = "//*[@id='tab-content-episodes']//*[@class='accordion']",
-                    art = art,
-                    id = id
-                ), 
-                title = title,
-                thumb = thumb,
-                art = art
-            )
-        )
-
-    if len(oc) > 0:
-        title = 'Episodes'
         oc.add(
             DirectoryObject(
                 key = Callback(
                     Items, 
                     title = title,
-                    url = url,
                     thumb = thumb,
-                    xpath_string = "//*[@id='tab-content-episodes']",
-                    art = art
+                    art = thumb,
+                    id = season.id_
                 ), 
                 title = title,
                 thumb = thumb,
-                art = art
+                art = thumb
             )
         )
+
+    # if len(oc) > 0:
+    #     title = 'Episodes'
+    #     oc.add(
+    #         DirectoryObject(
+    #             key = Callback(
+    #                 Items, 
+    #                 title = title,
+    #                 thumb = thumb,
+    #                 art = thumb
+    #             ), 
+    #             title = title,
+    #             thumb = thumb,
+    #             art = thumb
+    #         )
+    #     )
 
     return oc
 

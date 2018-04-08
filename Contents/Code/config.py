@@ -1,7 +1,3 @@
-import ssl
-
-ssl._create_default_https_context = ssl._create_unverified_context
-
 TITLE = 'Rooster Teeth'
 ART   = 'art-default.jpg'
 ICON  = 'icon-default.png'

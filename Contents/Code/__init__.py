@@ -152,6 +152,7 @@ def RecentEpisodes(channel):
                 thumb = episode.thumbnail,
                 summary = episode.description,
                 # TODO: url = episode.video.get_quality(),
+                url = 'http://wpc.1765A.taucdn.net/801765A/video/uploads/videos/c762632a-b8de-4859-962d-607d8e77ccc4/NewHLS-720P.m3u8',
                 season = episode.season.number,
                 duration = episode.length
             )

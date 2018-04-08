@@ -54,25 +54,22 @@ def Shows(channel):
 
     channel = channel.replace(" ", "")
 
-    try:
-        shows = get_shows(api, channel=channel)
+    shows = get_shows(api, channel=channel)
 
-        for show in shows:
-            oc.add(
-                DirectoryObject(
-                    key = Callback(
-                        ShowEpisodes, 
-                        show = show.name,
-                        id = show.id,
-                        thumb = show.thumbnail
-                    ), 
-                    title = show.name,
-                    summary = show.summary,
+    for show in shows:
+        oc.add(
+            DirectoryObject(
+                key = Callback(
+                    ShowEpisodes, 
+                    show = show.name,
+                    id = show.id,
                     thumb = show.thumbnail
-                )
+                ), 
+                title = show.name,
+                summary = show.summary,
+                thumb = show.thumbnail
             )
-    except:
-        pass
+        )
 
     if len(oc) < 1:
         oc.header  = "Sorry"

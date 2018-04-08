@@ -62,7 +62,7 @@ def Shows(channel):
                 key = Callback(
                     ShowEpisodes, 
                     show = show.name,
-                    id = show.id,
+                    id = show.id_,
                     thumb = show.thumbnail
                 ), 
                 title = show.name,

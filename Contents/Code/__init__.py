@@ -146,7 +146,6 @@ def RecentEpisodes(channel):
     episodes = list(itertools.islice(episodes, 10))
 
     for episode in episodes:
-        Log.Info("Video url %s" % episode.video.get_quality())
         oc.add(
             EpisodeObject(
                 title = episode.title,

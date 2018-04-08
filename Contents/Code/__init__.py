@@ -1,6 +1,9 @@
 from config import *
 from requirements_plex import api
 from api_functs import *
+from requests.utils import DEFAULT_CA_BUNDLE_PATH
+
+Log.Info("Default path at %s." % DEFAULT_CA_BUNDLE_PATH)
 
 ##########################################################################################
 def Start():

@@ -54,22 +54,22 @@ def Shows(channel):
 
     channel = channel.replace(" ", "")
 
-    episodes = api.episodes(site=channel)
+    # episodes = api.episodes(site=channel)
 
-    for episode in episodes:
-        oc.add(
-            DirectoryObject(
-                # key = Callback(
-                    # Items, 
-                    # title = title,
-                    # thumb = thumb,
-                    # art = thumb
-                # ),
-                title = episode.title,
-                thumb = episode.thumbnail,
-                summary = episode.description
-            )
-        )
+    # for episode in episodes:
+    #     oc.add(
+    #         DirectoryObject(
+    #             # key = Callback(
+    #                 # Items, 
+    #                 # title = title,
+    #                 # thumb = thumb,
+    #                 # art = thumb
+    #             # ),
+    #             title = episode.title,
+    #             thumb = episode.thumbnail,
+    #             summary = episode.description
+    #         )
+    #     )
 
     shows = api.shows(site=channel)
 

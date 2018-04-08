@@ -1,1 +1,1 @@
-pip install --target=Contents/Libraries/Shared rt_api
+pip install --target=Contents/Libraries/Shared -r Contents/Libraries/Repos/rt_api/requirements.txt

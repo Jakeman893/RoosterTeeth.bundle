@@ -148,7 +148,7 @@ def RecentEpisodes(channel):
     for episode in episodes:
         oc.add(
             EpisodeObject(
-                key = WebVieoURL(episode.video.get_quality()),
+                key = WebVideoURL(episode.video.get_quality()),
                 title = episode.title,
                 thumb = episode.thumbnail,
                 summary = episode.description,

@@ -147,14 +147,17 @@ def RecentEpisodes(channel):
 
     for episode in episodes:
         oc.add(
-            DirectoryObject(
-                key = None,
+            EpisodeObject(
+                key = WebVieoURL(episode.video.get_quality()),
                 title = episode.title,
                 thumb = episode.thumbnail,
-                summary = episode.description
+                summary = episode.description,
+                url = episode.canonical_url,
+                season = episode.season,
+                duration = episode.length,
+                art = episode.season.cover_picture
             )
         )
-
     return oc
 
 ##########################################################################################

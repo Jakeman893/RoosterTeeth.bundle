@@ -54,27 +54,13 @@ def Shows(channel):
 
     channel = channel.replace(" ", "")
 
-    # oc.add(
-    #     DirectoryObject(
-    #         title = 'Recent'
-    #     )
-    # )
-
-    # episodes = api.episodes(site=channel)
-
-    # for episode in episodes:
-    #     oc.add(
-    #         DirectoryObject(
-    #             key = None,
-    #             title = episode.title,
-    #             thumb = episode.thumbnail,
-    #             summary = episode.description
-    #         )
-    #     )
-
     oc.add(
         DirectoryObject(
-            title = 'Shows'
+            key = Callback(
+                RecentEpisodes,
+                channel=channel
+            ),
+            title = 'Recent'
         )
     )
 
@@ -84,7 +70,7 @@ def Shows(channel):
         oc.add(
             DirectoryObject(
                 key = Callback(
-                    ShowEpisodes, 
+                    ShowSeasons, 
                     show = show
                 ), 
                 title = show.name,
@@ -100,11 +86,11 @@ def Shows(channel):
     return oc
 
 ##########################################################################################
-@route("/video/roosterteeth/ShowEpisodes")
-def ShowEpisodes(show):
-    oc = ObjectContainer(title2=show.name)
+@route("/video/roosterteeth/ShowSeasons")
+def ShowSeasons(show):
+    oc = ObjectContainer(title2=show.name, art = show.cover_picture)
 
-    Log.Info("Getting episodes for %s." % show.name)
+    Log.Info("Getting seasons for %s." % show.name)
 
     oc.add(
         DirectoryObject(
@@ -143,6 +129,27 @@ def ShowEpisodes(show):
                     id = season.id_
                 ), 
                 title = title
+            )
+        )
+
+    return oc
+
+##########################################################################################
+@route("/video/roosterteeth/RecentEpisodes")
+def RecentEpisodes(channel):
+    oc = ObjectContainer(title2='Recent')
+
+    Log.Info("Getting recent episodes for %s." % channel)
+
+    episodes = api.episodes(site=channel)
+
+    for episode in episodes:
+        oc.add(
+            DirectoryObject(
+                key = None,
+                title = episode.title,
+                thumb = episode.thumbnail,
+                summary = episode.description
             )
         )
 

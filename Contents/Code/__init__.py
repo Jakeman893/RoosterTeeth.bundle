@@ -85,6 +85,26 @@ def ShowEpisodes(show, id, thumb):
 
     Log.Info("Getting episodes for %s." % show)
 
+    oc.add(
+        DirectoryObject(
+            title = 'Recent'
+        )
+    )
+
+    for episode in get_recent_show_episodes(api, channel=show):
+        oc.add(
+            DirectoryObject(
+                key = Callback(
+                    Items, 
+                    title = title,
+                    thumb = thumb,
+                    art = thumb
+                ),
+                title = episode.title,
+                thumb = episode.thumbnail
+            )
+        )
+
     seasons = get_seasons(api, show_id=id)
 
     # Fetch seasons    
@@ -105,22 +125,6 @@ def ShowEpisodes(show, id, thumb):
                 art = thumb
             )
         )
-
-    # if len(oc) > 0:
-    #     title = 'Episodes'
-    #     oc.add(
-    #         DirectoryObject(
-    #             key = Callback(
-    #                 Items, 
-    #                 title = title,
-    #                 thumb = thumb,
-    #                 art = thumb
-    #             ), 
-    #             title = title,
-    #             thumb = thumb,
-    #             art = thumb
-    #         )
-    #     )
 
     return oc
 

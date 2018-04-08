@@ -152,7 +152,7 @@ def RecentEpisodes(channel):
                 thumb = episode.thumbnail,
                 summary = episode.description,
                 url = episode.canonical_url,
-                season = episode.season,
+                season = episode.season.number,
                 duration = episode.length
             )
         )

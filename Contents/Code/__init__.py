@@ -146,6 +146,8 @@ def RecentEpisodes(channel):
     episodes = list(itertools.islice(episodes, 10))
 
     for episode in episodes:
+        if episode.is_sponsor_only:
+            continue
         oc.add(
             EpisodeObject(
                 title = episode.title,

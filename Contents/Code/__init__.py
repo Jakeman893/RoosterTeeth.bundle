@@ -1,9 +1,6 @@
 from config import *
 from requirements_plex import api
 from api_functs import *
-from requests.utils import DEFAULT_CA_BUNDLE_PATH
-
-Log.Info("Default path at %s." % DEFAULT_CA_BUNDLE_PATH)
 
 ##########################################################################################
 def Start():
@@ -155,7 +152,7 @@ def RecentEpisodes(channel):
                 title = episode.title,
                 thumb = episode.thumbnail,
                 summary = episode.description,
-                url = episode.video.get_quality(),
+                # url = episode.video.get_quality(),
                 season = episode.season.number,
                 duration = episode.length
             )

@@ -143,6 +143,8 @@ def RecentEpisodes(channel):
 
     episodes = api.episodes(site=channel)
 
+    episodes = list(itertools.islice(episodes, 10))
+
     for episode in episodes:
         oc.add(
             DirectoryObject(

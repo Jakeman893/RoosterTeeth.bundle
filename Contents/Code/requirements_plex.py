@@ -26,7 +26,7 @@ except OSError, e:
     Log.Error('%s See "%s"' % (e.strerror, e.filename))
     raise
 
-for dir in ['urllib3', 'requests', 'requests_oauthlib', 'vcrpy', 'm3u8', 'flaky', 'httmock','rt_api']:
+for dir in ['certifi', 'chardet', 'idna', 'iso8601', 'm3u8', 'oauthlib', 'requests', 'requests_oauthlib', 'rt_api', 'urllib3']:
     lib_path = libraries_path+dir
     if lib_path not in sys.path:
         sys.path.insert(0, lib_path)

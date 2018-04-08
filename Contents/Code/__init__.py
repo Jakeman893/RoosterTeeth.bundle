@@ -54,16 +54,31 @@ def Shows(channel):
 
     channel = channel.replace(" ", "")
 
-    shows = get_shows(api, channel=channel)
+    episodes = api.episodes(site=channel)
+
+    for episode in episodes:
+        oc.add(
+            DirectoryObject(
+                # key = Callback(
+                    # Items, 
+                    # title = title,
+                    # thumb = thumb,
+                    # art = thumb
+                # ),
+                title = episode.title,
+                thumb = episode.thumbnail,
+                summary = episode.description
+            )
+        )
+
+    shows = api.shows(site=channel)
 
     for show in shows:
         oc.add(
             DirectoryObject(
                 key = Callback(
                     ShowEpisodes, 
-                    show = show.name,
-                    id = show.id_,
-                    thumb = show.thumbnail
+                    show = show
                 ), 
                 title = show.name,
                 summary = show.summary,
@@ -79,11 +94,10 @@ def Shows(channel):
 
 ##########################################################################################
 @route("/video/roosterteeth/ShowEpisodes")
-def ShowEpisodes(show, id, thumb):
+def ShowEpisodes(show):
+    oc = ObjectContainer(title2=show.name)
 
-    oc = ObjectContainer(title2=show)
-
-    Log.Info("Getting episodes for %s." % show)
+    Log.Info("Getting episodes for %s." % show.name)
 
     oc.add(
         DirectoryObject(
@@ -91,7 +105,9 @@ def ShowEpisodes(show, id, thumb):
         )
     )
 
-    for episode in get_recent_show_episodes(api, channel=show):
+    episodes = show.episodes
+
+    for episode in episodes:
         oc.add(
             DirectoryObject(
                 key = Callback(
@@ -101,11 +117,12 @@ def ShowEpisodes(show, id, thumb):
                     art = thumb
                 ),
                 title = episode.title,
-                thumb = episode.thumbnail
+                thumb = episode.thumbnail,
+                summary = episode.description
             )
         )
 
-    seasons = get_seasons(api, show_id=id)
+    seasons = show.seasons
 
     # Fetch seasons    
     for season in seasons:
@@ -116,13 +133,9 @@ def ShowEpisodes(show, id, thumb):
                 key = Callback(
                     Items, 
                     title = title,
-                    thumb = thumb,
-                    art = thumb,
                     id = season.id_
                 ), 
-                title = title,
-                thumb = thumb,
-                art = thumb
+                title = title
             )
         )
 

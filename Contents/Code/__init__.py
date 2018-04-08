@@ -89,7 +89,7 @@ def ShowEpisodes(show, id, thumb):
 
     # Fetch seasons    
     for season in seasons:
-        title = "Season " + season.number
+        title = "Season " + str(season.number)
 
         oc.add(
             DirectoryObject(

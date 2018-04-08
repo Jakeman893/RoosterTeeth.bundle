@@ -56,7 +56,7 @@ def Shows(channel):
 
     shows = get_shows(api, channel=channel)
 
-    for show in show:
+    for show in shows:
         oc.add(
             DirectoryObject(
                 key = Callback(

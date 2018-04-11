@@ -140,7 +140,7 @@ def RecentEpisodes(channel):
                         optimized_for_streaming = True,
                         parts = [
                             PartObject(
-                                key = HTTPLiveStreamURL(episode.video.get_quality())
+                                key = HTTPMP4Video(episode.video.get_quality())
                             )
                         ]
                     )

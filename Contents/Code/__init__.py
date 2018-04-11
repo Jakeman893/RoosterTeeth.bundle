@@ -155,7 +155,7 @@ def SeasonEpisodes(season):
     season = api.season(season)
     oc = ObjectContainer(title2='Season %d' % season.number)
 
-    Log.Info("Getting season episodes for %s Season %s." % (show, season))
+    Log.Info("Getting season episodes for Season %d." % (season.number))
 
     episodes = season.episodes
 

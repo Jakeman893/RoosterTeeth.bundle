@@ -136,18 +136,16 @@ def RecentEpisodes(channel):
                 duration = episode.length,
                 items = [
                     MediaObject(
-                        protocol = 'hls',
+                        container = Container.MP4,
                         video_codec = VideoCodec.H264,
-                        video_frame_rate = 30,
                         audio_codec = AudioCodec.AAC,
                         video_resolution = 720,
                         audio_channels = 2,
-                        optimized_for_streaming = True,
                         parts = [
                             PartObject(
-                                key = HTTPLiveStreamURL(
-                                    Callback(PlayStream, 
-                                    url = episode.video.get_quality())
+                                    key = Callback(PlayOfflineStream, 
+                                    url = episode.video.get_quality()
+                                    )
                                 )
                             )
                         ]
@@ -195,6 +193,6 @@ def SeasonEpisodes(season):
     return oc
 
 @indirect
-def PlayStream(url, **kwargs):
+def PlayOfflineStream(url, **kwargs):
     Log.Info(' --> Final stream url: %s' % (url))
-    return IndirectResponse(VideoClipObject, key=HTTPLiveStreamURL(url))
+    return IndirectResponse(VideoClipObject, key=url)

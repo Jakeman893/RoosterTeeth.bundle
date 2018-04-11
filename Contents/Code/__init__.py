@@ -71,7 +71,7 @@ def Shows(channel):
             DirectoryObject(
                 key = Callback(
                     ShowSeasons, 
-                    show = show
+                    show = show.id_
                 ), 
                 title = show.name,
                 summary = show.summary,
@@ -88,6 +88,7 @@ def Shows(channel):
 ##########################################################################################
 @route("/video/roosterteeth/ShowSeasons")
 def ShowSeasons(show):
+    show = api.show(show)
     oc = ObjectContainer(title2=show.name, art = show.cover_picture)
 
     Log.Info("Getting seasons for %s." % show.name)

@@ -140,7 +140,7 @@ def RecentEpisodes(channel):
                         optimized_for_streaming = True,
                         parts = [
                             PartObject(
-                                key = HTTPMP4Streaming(episode.video.get_quality())
+                                key = RTMPVideoURL(episode.video.get_quality())
                             )
                         ]
                     )

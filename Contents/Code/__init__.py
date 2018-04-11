@@ -136,11 +136,19 @@ def RecentEpisodes(channel):
                 duration = episode.length,
                 items = [
                     MediaObject(
+                        protocol = 'hls',
+                        video_codec = VideoCodec.H264,
+                        video_frame_rate = 30,
+                        audio_codec = AudioCodec.AAC,
                         video_resolution = 720,
+                        audio_channels = 2,
                         optimized_for_streaming = True,
                         parts = [
                             PartObject(
-                                key = RTMPVideoURL(episode.video.get_quality())
+                                key = HTTPLiveStreamURL(
+                                    Callback(PlayStream, 
+                                    url = episode.video.get_quality())
+                                )
                             )
                         ]
                     )
@@ -185,3 +193,8 @@ def SeasonEpisodes(season):
             )
         )
     return oc
+
+    @indirect
+    def PlayStream(url, **kwargs):
+        Log.Info(' --> Final stream url: %s' % (url))
+        return IndirectResponse(VideoClipObject, key=HTTPLiveStreamURL(url))

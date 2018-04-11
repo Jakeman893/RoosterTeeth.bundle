@@ -163,6 +163,8 @@ def SeasonEpisodes(season):
     for episode in episodes:
         if episode.is_sponsor_only:
             continue
+        url = episode.video.get_quality()
+        Log.Info("Stream URL is %s." % url)
         oc.add(
             EpisodeObject(
                 key = Callback(SeasonEpisodes, season.id_),
@@ -178,7 +180,7 @@ def SeasonEpisodes(season):
                         optimized_for_streaming = True,
                         parts = [
                             PartObject(
-                                key = HTTPLiveStreamURL(episode.video.get_quality())
+                                key = HTTPLiveStreamURL(url)
                             )
                         ]
                     )

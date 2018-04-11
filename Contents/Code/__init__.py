@@ -93,29 +93,6 @@ def ShowSeasons(show):
 
     Log.Info("Getting seasons for %s." % show.name)
 
-    oc.add(
-        DirectoryObject(
-            title = 'Recent'
-        )
-    )
-
-    episodes = show.episodes
-
-    for episode in episodes:
-        oc.add(
-            DirectoryObject(
-                key = Callback(
-                    Items, 
-                    title = title,
-                    thumb = thumb,
-                    art = thumb
-                ),
-                title = episode.title,
-                thumb = episode.thumbnail,
-                summary = episode.description
-            )
-        )
-
     seasons = show.seasons
 
     # Fetch seasons    
@@ -125,9 +102,8 @@ def ShowSeasons(show):
         oc.add(
             DirectoryObject(
                 key = Callback(
-                    Items, 
-                    title = title,
-                    id = season.id_
+                    SeasonEpisodes, 
+                    season = season.id_
                 ), 
                 title = title
             )
@@ -157,6 +133,43 @@ def RecentEpisodes(channel):
                 thumb = episode.thumbnail,
                 summary = episode.description,
                 season = episode.season.number,
+                duration = episode.length,
+                items = [
+                    MediaObject(
+                        video_resolution = 720,
+                        optimized_for_streaming = True,
+                        parts = [
+                            PartObject(
+                                key = HTTPLiveStreamURL(episode.video.get_quality())
+                            )
+                        ]
+                    )
+                ]
+            )
+        )
+    return oc
+
+##########################################################################################
+@route("/video/roosterteeth/<show>/<season>/episodes")
+def SeasonEpisodes(season):
+    season = api.season(season)
+    oc = ObjectContainer(title2='Season' + season)
+
+    Log.Info("Getting season episodes for %s Season %s." % (show, season))
+
+    episodes = season.episodes
+
+    for episode in episodes:
+        if episode.is_sponsor_only:
+            continue
+        oc.add(
+            EpisodeObject(
+                key = Callback(RecentEpisodes, channel),
+                rating_key = episode.id_,
+                title = episode.title,
+                thumb = episode.thumbnail,
+                summary = episode.description,
+                season = season.number,
                 duration = episode.length,
                 items = [
                     MediaObject(

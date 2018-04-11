@@ -153,7 +153,7 @@ def RecentEpisodes(channel):
 @route("/video/roosterteeth/<show>/<season>/episodes")
 def SeasonEpisodes(season):
     season = api.season(season)
-    oc = ObjectContainer(title2='Season' + season)
+    oc = ObjectContainer(title2='Season ' + season.number)
 
     Log.Info("Getting season episodes for %s Season %s." % (show, season))
 

@@ -164,7 +164,7 @@ def SeasonEpisodes(season):
             continue
         oc.add(
             EpisodeObject(
-                key = Callback(RecentEpisodes, channel),
+                key = Callback(SeasonEpisodes, season.id_),
                 rating_key = episode.id_,
                 title = episode.title,
                 thumb = episode.thumbnail,

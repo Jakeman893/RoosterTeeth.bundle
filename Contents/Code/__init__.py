@@ -194,7 +194,7 @@ def SeasonEpisodes(season):
         )
     return oc
 
-    @indirect
-    def PlayStream(url, **kwargs):
-        Log.Info(' --> Final stream url: %s' % (url))
-        return IndirectResponse(VideoClipObject, key=HTTPLiveStreamURL(url))
+@indirect
+def PlayStream(url, **kwargs):
+    Log.Info(' --> Final stream url: %s' % (url))
+    return IndirectResponse(VideoClipObject, key=HTTPLiveStreamURL(url))

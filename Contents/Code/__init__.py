@@ -150,12 +150,23 @@ def RecentEpisodes(channel):
             continue
         oc.add(
             EpisodeObject(
+                key = Callback(RecentEpisodes, channel),
                 title = episode.title,
                 thumb = episode.thumbnail,
                 summary = episode.description,
-                url = episode.canonical_url,
                 season = episode.season.number,
-                duration = episode.length
+                duration = episode.length,
+                items = [
+                    MediaObject(
+                        video_resolution = 720,
+                        optimized_for_streaming = True,
+                        parts = [
+                            PartObject(
+                                key = episode.video.get_quality()
+                            )
+                        ]
+                    )
+                ]
             )
         )
     return oc

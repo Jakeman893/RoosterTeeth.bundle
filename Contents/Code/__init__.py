@@ -151,6 +151,7 @@ def RecentEpisodes(channel):
         oc.add(
             EpisodeObject(
                 key = Callback(RecentEpisodes, channel),
+                rating_key = episode.id_,
                 title = episode.title,
                 thumb = episode.thumbnail,
                 summary = episode.description,
@@ -162,7 +163,7 @@ def RecentEpisodes(channel):
                         optimized_for_streaming = True,
                         parts = [
                             PartObject(
-                                key = episode.video.get_quality()
+                                key = HTTPLiveStreamURL(episode.video.get_quality())
                             )
                         ]
                     )

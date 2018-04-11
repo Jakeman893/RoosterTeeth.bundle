@@ -142,12 +142,7 @@ def RecentEpisodes(channel):
                         video_resolution = 720,
                         audio_channels = 2,
                         parts = [
-                            PartObject(
-                                    key = Callback(PlayOfflineStream, 
-                                    url = episode.video.get_quality()
-                                    )
-                                )
-                            )
+                            PartObject(key = Callback(PlayOfflineStream,url = episode.video.get_quality()))
                         ]
                     )
                 ]

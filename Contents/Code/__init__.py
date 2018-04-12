@@ -156,7 +156,7 @@ def RecentEpisodes(channel):
 
 ##########################################################################################
 @route("/video/roosterteeth/season/episodes")
-def SeasonEpisodes(season):
+def SeasonEpisodes(season, **kwargs):
     season = api.season(season)
     oc = ObjectContainer(title2='Season %d' % season.number)
 
@@ -200,7 +200,7 @@ def PlayOfflineStream(url, **kwargs):
     return IndirectResponse(VideoClipObject, key=url)
 
 @indirect
-def PlayVideo(url):
+def PlayVideo(url, **kwargs):
     # parts = []
     Log.Info('Getting video files for %s' % (url))
     # m3u8_obj = m3u8.load(m3u8_url)

@@ -197,14 +197,15 @@ def PlayOfflineStream(url, **kwargs):
 def GetStreamParts(m3u8_url):
     parts = []
     Log.Info('Getting video files for %s' % (m3u8_url))
-    try:
-        url = requests.get(m3u8_url)
-    except requests.exceptions.SSLError:
-        url = requests.get(m3u8_url, verify=False)
-        print "Warning: SSL Certificate Error"
-        pass
+    m3u8_obj = m3u8.load(m3u8_url)
+    # try:
+    #     url = requests.get(m3u8_url)
+    # except requests.exceptions.SSLError:
+    #     url = requests.get(m3u8_url, verify=False)
+    #     print "Warning: SSL Certificate Error"
+    #     pass
     
-    m3u8_obj = m3u8.loads(url.text)
+    # m3u8_obj = m3u8.loads(url.text)
 
     for seg in m3u8_obj.segments:
         parts.append(

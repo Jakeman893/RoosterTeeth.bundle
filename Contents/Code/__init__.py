@@ -181,7 +181,6 @@ def SeasonEpisodes(season):
                 items = [
                     MediaObject(
                         video_resolution = resolution,
-                        optimized_for_streaming = True,
                         parts = GetStreamParts(url)
                     )
                 ]
@@ -194,6 +193,7 @@ def PlayOfflineStream(url, **kwargs):
     Log.Info(' --> Final stream url: %s' % (url))
     return IndirectResponse(VideoClipObject, key=url)
 
+@indirect
 def GetStreamParts(m3u8_url):
     parts = []
     Log.Info('Getting video files for %s' % (m3u8_url))

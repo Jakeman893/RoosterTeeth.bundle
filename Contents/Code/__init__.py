@@ -209,7 +209,7 @@ def GetStreamParts(m3u8_url):
     # m3u8_obj = m3u8.loads(url.text)
 
     for seg in m3u8_obj.segments:
-        duration = (int) seg.duration * 1000
+        duration = int(seg.duration * 1000)
         Log.Info('Log duration %d' % duration)
         parts.append(
             PartObject(

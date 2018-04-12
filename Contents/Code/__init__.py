@@ -180,14 +180,14 @@ def SeasonEpisodes(season):
                 duration = episode.length,
                 items = [
                     MediaObject(
-                        container = 'mpegts',
-                        video_codec = VideoCodec.H264,
-                        audio_codec = AudioCodec.AAC,
-                        audio_channels = 2,
+                        container               = 'mpegts',
+                        video_codec             = VideoCodec.H264,
+                        audio_codec             = AudioCodec.AAC,
+                        audio_channels          = 2,
                         optimized_for_streaming = True,
-                        parts = [PartObject(
-                            key = HTTPLiveStreamURL(Callback(PlayVideo, url = url))
-                        )]
+                        parts                   = [PartObject(
+                                                    key = Callback(PlayVideo, url = url, ext = 'ts')
+                                                )]
                     )
                 ]
             )
@@ -199,6 +199,7 @@ def PlayOfflineStream(url, **kwargs):
     Log.Info(' --> Final stream url: %s' % (url))
     return IndirectResponse(VideoClipObject, key=url)
 
+@indirect
 def PlayVideo(url):
     # parts = []
     Log.Info('Getting video files for %s' % (url))

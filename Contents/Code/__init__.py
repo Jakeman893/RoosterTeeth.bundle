@@ -167,7 +167,7 @@ def SeasonEpisodes(season, **kwargs):
     for episode in episodes:
         if episode.is_sponsor_only:
             continue
-        url = episode.video.url
+        url = episode.video.url.replace('https', 'http')
         Log.Info("Stream URL is %s." % url)
         oc.add(
             EpisodeObject(

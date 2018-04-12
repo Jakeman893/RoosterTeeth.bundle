@@ -4,7 +4,7 @@ from api_functs import *
 import m3u8
 import requests
 
-resolution = 720
+resolution = None
 
 ##########################################################################################
 def Start():

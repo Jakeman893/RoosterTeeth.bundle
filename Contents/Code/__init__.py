@@ -1,6 +1,10 @@
 from config import *
 from requirements_plex import api
 from api_functs import *
+import m3u8
+import requests
+
+resolution = 720
 
 ##########################################################################################
 def Start():
@@ -46,7 +50,7 @@ def MainMenu():
     return oc
 
 ##########################################################################################
-@route('/video/roosterteeth/<channel>/shows')
+@route('/video/roosterteeth/{channel}/shows')
 def Shows(channel):
     oc = ObjectContainer(title2=channel)
     
@@ -86,7 +90,7 @@ def Shows(channel):
     return oc
 
 ##########################################################################################
-@route("/video/roosterteeth/ShowSeasons")
+@route("/video/roosterteeth/{show}/seasons")
 def ShowSeasons(show):
     show = api.show(show)
     oc = ObjectContainer(title2=show.name, art = show.cover_picture)
@@ -112,7 +116,7 @@ def ShowSeasons(show):
     return oc
 
 ##########################################################################################
-@route("/video/roosterteeth/RecentEpisodes")
+@route("/video/roosterteeth/{channel}/recent")
 def RecentEpisodes(channel):
     oc = ObjectContainer(title2='Recent')
 
@@ -139,7 +143,7 @@ def RecentEpisodes(channel):
                         container = Container.MP4,
                         video_codec = VideoCodec.H264,
                         audio_codec = AudioCodec.AAC,
-                        video_resolution = 720,
+                        video_resolution = resolution,
                         audio_channels = 2,
                         parts = [
                             PartObject(key = Callback(PlayOfflineStream,url = episode.video.get_quality()))
@@ -151,7 +155,7 @@ def RecentEpisodes(channel):
     return oc
 
 ##########################################################################################
-@route("/video/roosterteeth/<show>/<season>/episodes")
+@route("/video/roosterteeth/{season}/episodes")
 def SeasonEpisodes(season):
     season = api.season(season)
     oc = ObjectContainer(title2='Season %d' % season.number)
@@ -163,7 +167,7 @@ def SeasonEpisodes(season):
     for episode in episodes:
         if episode.is_sponsor_only:
             continue
-        url = episode.video.get_quality().replace('https', 'http')
+        url = episode.video.get_quality(resolution).replace('https', 'http')
         Log.Info("Stream URL is %s." % url)
         oc.add(
             EpisodeObject(
@@ -176,13 +180,9 @@ def SeasonEpisodes(season):
                 duration = episode.length,
                 items = [
                     MediaObject(
-                        video_resolution = 720,
+                        video_resolution = resolution,
                         optimized_for_streaming = True,
-                        parts = [
-                            PartObject(
-                                key = HTTPLiveStreamURL(url)
-                            )
-                        ]
+                        parts = GetStreamParts(url)
                     )
                 ]
             )
@@ -193,3 +193,25 @@ def SeasonEpisodes(season):
 def PlayOfflineStream(url, **kwargs):
     Log.Info(' --> Final stream url: %s' % (url))
     return IndirectResponse(VideoClipObject, key=url)
+
+def GetStreamParts(m3u8_url):
+    parts = []
+    Log.Info('Getting video files for %s' % (m3u8_url))
+    try:
+        url = requests.get(m3u8_url)
+    except requests.exceptions.SSLError:
+        url = requests.get(m3u8_url, verify=False)
+        print "Warning: SSL Certificate Error"
+        pass
+    
+    m3u8_obj = m3u8.loads(url.text)
+
+    for seg in m3u8_obj.segments:
+        parts.append(
+            PartObject(
+                key=seg.absolute_uri,
+                duration=seg.duration * 1000
+            )
+        )
+
+    return parts

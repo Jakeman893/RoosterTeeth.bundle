@@ -211,7 +211,7 @@ def PlayVideo(url, **kwargs):
         Log.Info("Warning: SSL Certificate Error")
         pass
     
-    m3u8_obj = m3u8.loads(url.text)
+    m3u8_obj = m3u8.loads(res.text)
 
     m3u8_obj.base_uri = url.replace('.m3u8', '')
     return m3u8_obj.segments[0].absolute_uri

@@ -50,7 +50,7 @@ def MainMenu():
     return oc
 
 ##########################################################################################
-@route('/video/roosterteeth/{channel}/shows')
+@route('/video/roosterteeth/channel/shows')
 def Shows(channel):
     oc = ObjectContainer(title2=channel)
     
@@ -90,7 +90,7 @@ def Shows(channel):
     return oc
 
 ##########################################################################################
-@route("/video/roosterteeth/{show}/seasons")
+@route("/video/roosterteeth/show/seasons")
 def ShowSeasons(show):
     show = api.show(show)
     oc = ObjectContainer(title2=show.name, art = show.cover_picture)
@@ -116,7 +116,7 @@ def ShowSeasons(show):
     return oc
 
 ##########################################################################################
-@route("/video/roosterteeth/{channel}/recent")
+@route("/video/roosterteeth/channel/recent")
 def RecentEpisodes(channel):
     oc = ObjectContainer(title2='Recent')
 
@@ -155,7 +155,7 @@ def RecentEpisodes(channel):
     return oc
 
 ##########################################################################################
-@route("/video/roosterteeth/{season}/episodes")
+@route("/video/roosterteeth/season/episodes")
 def SeasonEpisodes(season):
     season = api.season(season)
     oc = ObjectContainer(title2='Season %d' % season.number)

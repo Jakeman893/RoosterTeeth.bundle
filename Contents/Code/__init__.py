@@ -185,7 +185,7 @@ def SeasonEpisodes(season):
                         audio_codec = AudioCodec.AAC,
                         audio_channels = 2,
                         optimized_for_streaming = True,
-                        parts = [PartsObject(
+                        parts = [PartObject(
                             key = HTTPLiveStreamURL(Callback(PlayVideo, url = url))
                         )]
                     )

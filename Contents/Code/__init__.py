@@ -167,7 +167,7 @@ def SeasonEpisodes(season, **kwargs):
     for episode in episodes:
         if episode.is_sponsor_only:
             continue
-        url = episode.video.get_quality(resolution)
+        url = episode.video.url
         Log.Info("Stream URL is %s." % url)
         oc.add(
             EpisodeObject(
@@ -180,13 +180,10 @@ def SeasonEpisodes(season, **kwargs):
                 duration = episode.length,
                 items = [
                     MediaObject(
-                        container               = 'mpegts',
-                        video_codec             = VideoCodec.H264,
-                        audio_codec             = AudioCodec.AAC,
                         audio_channels          = 2,
                         optimized_for_streaming = True,
                         parts                   = [PartObject(
-                                                    key = Callback(PlayVideo, url = url)
+                                                    key = HTTPLiveStreamURL(url=url)
                                                 )]
                     )
                 ]

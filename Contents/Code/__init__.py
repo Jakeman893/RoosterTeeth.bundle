@@ -167,7 +167,7 @@ def SeasonEpisodes(season, **kwargs):
     for episode in episodes:
         if episode.is_sponsor_only:
             continue
-        url = episode.video.get_quality(resolution).replace('https', 'http')
+        url = episode.video.get_quality(resolution)
         Log.Info("Stream URL is %s." % url)
         oc.add(
             EpisodeObject(
@@ -186,7 +186,7 @@ def SeasonEpisodes(season, **kwargs):
                         audio_channels          = 2,
                         optimized_for_streaming = True,
                         parts                   = [PartObject(
-                                                    key = Callback(PlayVideo, url = url, ext = 'ts')
+                                                    key = Callback(PlayVideo, url = url)
                                                 )]
                     )
                 ]
@@ -212,7 +212,7 @@ def PlayVideo(url, **kwargs):
         print "Warning: SSL Certificate Error"
         pass
     
-    return res.text
+    # return res.text
     # m3u8_obj = m3u8.loads(url.text)
 
     # for seg in m3u8_obj.segments:

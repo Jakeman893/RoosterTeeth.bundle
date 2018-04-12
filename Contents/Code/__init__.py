@@ -180,6 +180,10 @@ def SeasonEpisodes(season, **kwargs):
                 duration = episode.length,
                 items = [
                     MediaObject(
+                        protocol                = 'hls',
+                        container               = 'mpegts',
+                        video_codec             = VideoCodec.H264,
+                        audio_codec             = AudioCodec.AAC,
                         audio_channels          = 2,
                         optimized_for_streaming = True,
                         parts                   = [PartObject(

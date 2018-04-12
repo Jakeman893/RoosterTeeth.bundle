@@ -180,8 +180,14 @@ def SeasonEpisodes(season):
                 duration = episode.length,
                 items = [
                     MediaObject(
-                        video_resolution = resolution,
-                        parts = GetStreamParts(url)
+                        container = 'mpegts',
+                        video_codec = VideoCodec.H264,
+                        audio_codec = AudioCodec.AAC,
+                        audio_channels = 2,
+                        optimized_for_streaming = True,
+                        parts = [PartsObject(
+                            key = HTTPLiveStreamURL(Callback(PlayVideo, url = url))
+                        )]
                     )
                 ]
             )
@@ -193,29 +199,29 @@ def PlayOfflineStream(url, **kwargs):
     Log.Info(' --> Final stream url: %s' % (url))
     return IndirectResponse(VideoClipObject, key=url)
 
-@indirect
-def GetStreamParts(m3u8_url):
-    parts = []
-    Log.Info('Getting video files for %s' % (m3u8_url))
-    m3u8_obj = m3u8.load(m3u8_url)
+def PlayVideo(url):
+    # parts = []
+    Log.Info('Getting video files for %s' % (url))
+    # m3u8_obj = m3u8.load(m3u8_url)
     
-    # try:
-    #     url = requests.get(m3u8_url)
-    # except requests.exceptions.SSLError:
-    #     url = requests.get(m3u8_url, verify=False)
-    #     print "Warning: SSL Certificate Error"
-    #     pass
+    try:
+        res = requests.get(url)
+    except requests.exceptions.SSLError:
+        res = requests.get(url, verify=False)
+        print "Warning: SSL Certificate Error"
+        pass
     
+    return res.text
     # m3u8_obj = m3u8.loads(url.text)
 
-    for seg in m3u8_obj.segments:
-        duration = int(seg.duration * 1000)
-        Log.Info('Log duration %d' % duration)
-        parts.append(
-            PartObject(
-                key=seg.absolute_uri,
-                duration= duration
-            )
-        )
+    # for seg in m3u8_obj.segments:
+    #     duration = int(seg.duration * 1000)
+    #     Log.Info('Log duration %d' % duration)
+    #     parts.append(
+    #         PartObject(
+    #             key=seg.absolute_uri,
+    #             duration= duration
+    #         )
+    #     )
 
-    return parts
+    # return parts

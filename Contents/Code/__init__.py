@@ -214,6 +214,7 @@ def PlayVideo(url, **kwargs):
     m3u8_obj = m3u8.loads(res.text)
 
     m3u8_obj.base_uri = url.replace('.m3u8', '')
+    Log.Info('Returning segment from %s' % m3u8_obj.segments[0].absolute_uri)
     return m3u8_obj.segments[0].absolute_uri
 
     # for seg in m3u8_obj.segments:

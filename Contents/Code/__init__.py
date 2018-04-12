@@ -203,7 +203,7 @@ def PlayOfflineStream(url, **kwargs):
 def PlayVideo(url, **kwargs):
     # parts = []
     Log.Info('Getting video files for %s' % (url))
-    m3u8_obj = m3u8.load(m3u8_url)
+    m3u8_obj = m3u8.load(url)
 
     return m3u8_obj.segments[0].absolute_uri
 

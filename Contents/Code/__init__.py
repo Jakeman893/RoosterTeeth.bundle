@@ -171,7 +171,7 @@ def SeasonEpisodes(season, **kwargs):
         Log.Info("Stream URL is %s." % url)
         oc.add(
             EpisodeObject(
-                key = Callback(SeasonEpisodes, season.id_),
+                key = Callback(SeasonEpisodes, season = season.id_),
                 rating_key = episode.id_,
                 title = episode.title,
                 thumb = episode.thumbnail,

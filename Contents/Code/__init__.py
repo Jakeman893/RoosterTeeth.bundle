@@ -209,10 +209,10 @@ def PlayVideo(url, **kwargs):
         res = requests.get(url)
     except requests.exceptions.SSLError:
         res = requests.get(url, verify=False)
-        print "Warning: SSL Certificate Error"
+        Log.Info("Warning: SSL Certificate Error")
         pass
     
-    # return res.text
+    return res.text
     # m3u8_obj = m3u8.loads(url.text)
 
     # for seg in m3u8_obj.segments:

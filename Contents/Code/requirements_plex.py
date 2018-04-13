@@ -42,6 +42,6 @@ for dir in ['rt_api']:
     if lib_path not in sys.path:
         sys.path.insert(0, lib_path)
 
-import rt_api
+from rt_api.api import Api
 
-api = rt_api.api.Api()
+api = Api()

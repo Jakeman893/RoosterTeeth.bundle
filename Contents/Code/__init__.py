@@ -171,6 +171,7 @@ def SeasonEpisodes(season, **kwargs):
             CreateEpisodeObject(
                 ep_id = episode.id_
             )
+        )
 
     return oc
 

@@ -42,6 +42,14 @@ for dir in ['rt_api']:
     if lib_path not in sys.path:
         sys.path.insert(0, lib_path)
 
-from rt_api.api import Api
+import rt_api
 
-api = Api()
+api = rt_api.api.Api()
+
+token = None
+
+if Prefs['username'] and Prefs['password']:
+    try:
+        token = api.authenticate(Prefs['username'], Prefs['password'])
+    except rt_api.api.AuthenticationError:
+        Log.Error("Could not authenticate, possibly incorrect items.")

@@ -187,6 +187,7 @@ def CreateEpisodeObject(ep_id, include_container=False):
         summary = episode.description,
         thumb = episode.thumbnail,
         duration = episode.length,
+        art = episode.thumbnail,
         items = items
     )
 

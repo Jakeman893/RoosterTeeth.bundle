@@ -22,15 +22,15 @@ def ValidatePrefs():
 
     if Prefs['login'] and Prefs['username'] and Prefs['password']:
         try:
-            Log.Info("Attempting Login with: %s and %s" % (Prefs['username'], Prefs['password']))
+            # Log.Info("Attempting Login with: %s and %s" % (Prefs['username'], Prefs['password']))
             token = api.authenticate(Prefs['username'], Prefs['password'])
-            Log.Info("Login success: %s" % token)
+            Log.Info("Login success")
             return ObjectContainer(
                 header = "Login success",
                 message = "You're now logged in!"
             )
         except AuthenticationError:
-            Log.Error("Could not authenticate, possibly incorrect items.")
+            Log.Error("Could not authenticate, possibly incorrect username or password.")
             return ObjectContainer(
                 header = "Login failure",
                 message = "Please check your username and password"

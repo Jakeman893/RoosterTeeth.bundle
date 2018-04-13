@@ -167,65 +167,84 @@ def SeasonEpisodes(season, **kwargs):
     for episode in episodes:
         if episode.is_sponsor_only:
             continue
-        url = episode.video.url.replace('https', 'http')
-        Log.Info("Stream URL is %s." % url)
         oc.add(
-            EpisodeObject(
-                key = Callback(SeasonEpisodes, season = season.id_),
-                rating_key = episode.id_,
-                title = episode.title,
-                thumb = episode.thumbnail,
-                summary = episode.description,
-                season = season.number,
-                duration = episode.length,
-                items = [
-                    MediaObject(
-                        protocol                = 'hls',
-                        container               = 'mpegts',
-                        video_codec             = VideoCodec.H264,
-                        audio_codec             = AudioCodec.AAC,
-                        audio_channels          = 2,
-                        optimized_for_streaming = True,
-                        parts                   = [PartObject(
-                                                    key = HTTPLiveStreamURL(url=url)
-                                                )]
-                    )
-                ]
+            CreateEpisodeObject(
+                ep_id = episode.id_
+            )
+
+    return oc
+
+@route('/video/roosterteeth/videoclip')
+def CreateEpisodeObject(ep_id, include_container=False):
+    episode = api.episode(ep_id)
+
+    episode.video.available_qualities
+
+    items = []
+
+    for qual in episode.video.available_qualities:
+        items.append(
+            MediaObject(
+                protocol                = 'hls',
+                container               = 'mpegts',
+                video_codec             = VideoCodec.H264,
+                audio_codec             = AudioCodec.AAC,
+                video_resolution        = int(qual[:-1]),
+                audio_channels          = 2,
+                optimized_for_streaming = True,
+                parts = [PartObject(key=HTTPLiveStreamURL(url=episode.video.get_quality(qual)))]
             )
         )
-    return oc
+    items.reverse()
+
+    ep_obj = EpisodeObject(
+        key = Callback(CreateVideoClipObject, ep_id=ep_id, include_container=True),
+        rating_key = episode.id_,
+        title = episode.title,
+        summary = episode.description,
+        thumb = episode.thumbnail,
+        season = season.number,
+        duration = episode.length,
+        items = items
+    )
+
+    if include_container:
+        return ObjectContainer(objects=[ep_obj])
+    else:
+        return videoclip_obj
+
 
 @indirect
 def PlayOfflineStream(url, **kwargs):
     Log.Info(' --> Final stream url: %s' % (url))
     return IndirectResponse(VideoClipObject, key=url)
 
-@indirect
-def PlayVideo(url, **kwargs):
-    # parts = []
-    Log.Info('Getting video files for %s' % (url))
+# @indirect
+# def PlayVideo(url, **kwargs):
+#     # parts = []
+#     Log.Info('Getting video files for %s' % (url))
 
-    try:
-        res = requests.get(url)
-    except requests.exceptions.SSLError:
-        res = requests.get(url, verify=False)
-        Log.Info("Warning: SSL Certificate Error")
-        pass
+#     try:
+#         res = requests.get(url)
+#     except requests.exceptions.SSLError:
+#         res = requests.get(url, verify=False)
+#         Log.Info("Warning: SSL Certificate Error")
+#         pass
     
-    m3u8_obj = m3u8.loads(res.text)
+#     m3u8_obj = m3u8.loads(res.text)
 
-    m3u8_obj.base_uri = url.replace('.m3u8', '')
-    Log.Info('Returning segment from %s' % m3u8_obj.segments[0].absolute_uri)
-    return IndirectResponse(VideoClipObject, m3u8_obj.segments[0].absolute_uri)
+#     m3u8_obj.base_uri = url.replace('.m3u8', '')
+#     Log.Info('Returning segment from %s' % m3u8_obj.segments[0].absolute_uri)
+#     return IndirectResponse(VideoClipObject, m3u8_obj.segments[0].absolute_uri)
 
-    # for seg in m3u8_obj.segments:
-    #     duration = int(seg.duration * 1000)
-    #     Log.Info('Log duration %d' % duration)
-    #     parts.append(
-    #         PartObject(
-    #             key=seg.absolute_uri,
-    #             duration= duration
-    #         )
-    #     )
+#     # for seg in m3u8_obj.segments:
+#     #     duration = int(seg.duration * 1000)
+#     #     Log.Info('Log duration %d' % duration)
+#     #     parts.append(
+#     #         PartObject(
+#     #             key=seg.absolute_uri,
+#     #             duration= duration
+#     #         )
+#     #     )
 
-    # return parts
+#     # return parts

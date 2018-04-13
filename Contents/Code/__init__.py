@@ -199,7 +199,7 @@ def CreateEpisodeObject(ep_id, include_container=False):
     items.reverse()
 
     ep_obj = EpisodeObject(
-        key = Callback(CreateVideoClipObject, ep_id=ep_id, include_container=True),
+        key = Callback(CreateEpisodeObject, ep_id=ep_id, include_container=True),
         rating_key = episode.id_,
         title = episode.title,
         summary = episode.description,

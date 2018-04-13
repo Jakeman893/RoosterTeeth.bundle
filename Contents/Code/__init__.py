@@ -22,6 +22,7 @@ def ValidatePrefs():
 
     if Prefs['login'] and Prefs['username'] and Prefs['password']:
         try:
+            Log.Info("Attempting Login with: %s and %s" % (Prefs['username'], Prefs['password']))
             token = api.authenticate(Prefs['username'], Prefs['password'])
             Log.Info("Login success: %s" % token)
             return ObjectContainer(

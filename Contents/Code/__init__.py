@@ -18,9 +18,12 @@ def Start():
 ###################################################################################################
 def ValidatePrefs():
 
+    Log.Info("Attempting Login")
+
     if Prefs['login'] and Prefs['username'] and Prefs['password']:
         try:
             token = api.authenticate(Prefs['username'], Prefs['password'])
+            Log.Info("Login success: %s" % token)
             return ObjectContainer(
                 header = "Login success",
                 message = "You're now logged in!"

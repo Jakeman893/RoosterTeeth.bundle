@@ -124,32 +124,14 @@ def RecentEpisodes(channel):
 
     episodes = api.episodes(site=channel)
 
-    episodes = list(itertools.islice(episodes, 10))
+    episodes = list(itertools.islice(episodes, 20))
 
     for episode in episodes:
         if episode.is_sponsor_only:
             continue
         oc.add(
-            EpisodeObject(
-                key = Callback(RecentEpisodes, channel),
-                rating_key = episode.id_,
-                title = episode.title,
-                thumb = episode.thumbnail,
-                summary = episode.description,
-                season = episode.season.number,
-                duration = episode.length,
-                items = [
-                    MediaObject(
-                        container = Container.MP4,
-                        video_codec = VideoCodec.H264,
-                        audio_codec = AudioCodec.AAC,
-                        video_resolution = resolution,
-                        audio_channels = 2,
-                        parts = [
-                            PartObject(key = Callback(PlayOfflineStream,url = episode.video.get_quality()))
-                        ]
-                    )
-                ]
+            CreateEpisodeObject(
+                ep_id = episode.id_
             )
         )
     return oc
@@ -204,7 +186,6 @@ def CreateEpisodeObject(ep_id, include_container=False):
         title = episode.title,
         summary = episode.description,
         thumb = episode.thumbnail,
-        season = season.number,
         duration = episode.length,
         items = items
     )
@@ -212,7 +193,7 @@ def CreateEpisodeObject(ep_id, include_container=False):
     if include_container:
         return ObjectContainer(objects=[ep_obj])
     else:
-        return videoclip_obj
+        return ep_obj
 
 
 @indirect

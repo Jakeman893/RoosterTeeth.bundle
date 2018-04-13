@@ -3,8 +3,10 @@ from requirements_plex import api
 from api_functs import *
 import m3u8
 import requests
+from rt_api.api import AuthenticationError
 
 resolution = None
+token = None
 
 ##########################################################################################
 def Start():
@@ -17,14 +19,14 @@ def Start():
 def ValidatePrefs():
 
     if Prefs['login'] and Prefs['username'] and Prefs['password']:
-        result = Login()
-
-        if result:
+        try:
+            token = api.authenticate(Prefs['username'], Prefs['password'])
             return ObjectContainer(
                 header = "Login success",
                 message = "You're now logged in!"
             )
-        else:
+        except AuthenticationError:
+            Log.Error("Could not authenticate, possibly incorrect items.")
             return ObjectContainer(
                 header = "Login failure",
                 message = "Please check your username and password"
@@ -127,7 +129,7 @@ def RecentEpisodes(channel):
     episodes = list(itertools.islice(episodes, 20))
 
     for episode in episodes:
-        if episode.is_sponsor_only:
+        if episode.is_sponsor_only and not token:
             continue
         oc.add(
             CreateEpisodeObject(
@@ -147,7 +149,7 @@ def SeasonEpisodes(season, **kwargs):
     episodes = season.episodes
 
     for episode in episodes:
-        if episode.is_sponsor_only:
+        if episode.is_sponsor_only and not token:
             continue
         oc.add(
             CreateEpisodeObject(

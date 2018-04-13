@@ -45,11 +45,3 @@ for dir in ['rt_api']:
 import rt_api
 
 api = rt_api.api.Api()
-
-token = None
-
-if Prefs['username'] and Prefs['password']:
-    try:
-        token = api.authenticate(Prefs['username'], Prefs['password'])
-    except rt_api.api.AuthenticationError:
-        Log.Error("Could not authenticate, possibly incorrect items.")

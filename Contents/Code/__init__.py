@@ -17,10 +17,10 @@ def Start():
 
 ###################################################################################################
 def ValidatePrefs():
-
+    global token
     Log.Info("Attempting Login")
 
-    if Prefs['login'] and Prefs['username'] and Prefs['password']:
+    if not token and Prefs['login'] and Prefs['username'] and Prefs['password']:
         try:
             # Log.Info("Attempting Login with: %s and %s" % (Prefs['username'], Prefs['password']))
             token = api.authenticate(Prefs['username'], Prefs['password'])
@@ -39,6 +39,22 @@ def ValidatePrefs():
 ##########################################################################################
 @handler('/video/roosterteeth', TITLE, thumb = ICON, art = ART)
 def MainMenu():
+    global token
+    if not token and Prefs['login'] and Prefs['username'] and Prefs['password']:
+        try:
+            # Log.Info("Attempting Login with: %s and %s" % (Prefs['username'], Prefs['password']))
+            token = api.authenticate(Prefs['username'], Prefs['password'])
+            Log.Info("Login success")
+            return ObjectContainer(
+                header = "Login success",
+                message = "You're now logged in!"
+            )
+        except AuthenticationError:
+            Log.Error("Could not authenticate, possibly incorrect username or password.")
+            return ObjectContainer(
+                header = "Login failure",
+                message = "Please check your username and password"
+            )
 
     oc = ObjectContainer()
 
@@ -78,14 +94,15 @@ def Shows(channel):
 
     for show in shows:
         oc.add(
-            DirectoryObject(
+            TVShowObject(
                 key = Callback(
                     ShowSeasons, 
                     show = show.id_
                 ), 
                 title = show.name,
                 summary = show.summary,
-                thumb = show.thumbnail
+                thumb = show.thumbnail,
+                studio = channel
             )
         )
 
@@ -110,12 +127,17 @@ def ShowSeasons(show):
         title = "Season " + str(season.number)
 
         oc.add(
-            DirectoryObject(
+            SeasonObject(
                 key = Callback(
                     SeasonEpisodes, 
                     season = season.id_
-                ), 
-                title = title
+                ),
+                summary = season.description,
+                rating_key = season.id_,
+                title = season.title,
+                index = season.number,
+                show = season,
+                episode_count = len(season.episodes)
             )
         )
 
@@ -124,6 +146,7 @@ def ShowSeasons(show):
 ##########################################################################################
 @route("/video/roosterteeth/channel/recent")
 def RecentEpisodes(channel):
+    global token
     oc = ObjectContainer(title2='Recent')
 
     Log.Info("Getting recent episodes for %s." % channel)
@@ -145,6 +168,7 @@ def RecentEpisodes(channel):
 ##########################################################################################
 @route("/video/roosterteeth/season/episodes")
 def SeasonEpisodes(season, **kwargs):
+    global token
     season = api.season(season)
     oc = ObjectContainer(title2='Season %d' % season.number)
 
@@ -201,39 +225,3 @@ def CreateEpisodeObject(ep_id, include_container=False):
         return ObjectContainer(objects=[ep_obj])
     else:
         return ep_obj
-
-
-@indirect
-def PlayOfflineStream(url, **kwargs):
-    Log.Info(' --> Final stream url: %s' % (url))
-    return IndirectResponse(VideoClipObject, key=url)
-
-# @indirect
-# def PlayVideo(url, **kwargs):
-#     # parts = []
-#     Log.Info('Getting video files for %s' % (url))
-
-#     try:
-#         res = requests.get(url)
-#     except requests.exceptions.SSLError:
-#         res = requests.get(url, verify=False)
-#         Log.Info("Warning: SSL Certificate Error")
-#         pass
-    
-#     m3u8_obj = m3u8.loads(res.text)
-
-#     m3u8_obj.base_uri = url.replace('.m3u8', '')
-#     Log.Info('Returning segment from %s' % m3u8_obj.segments[0].absolute_uri)
-#     return IndirectResponse(VideoClipObject, m3u8_obj.segments[0].absolute_uri)
-
-#     # for seg in m3u8_obj.segments:
-#     #     duration = int(seg.duration * 1000)
-#     #     Log.Info('Log duration %d' % duration)
-#     #     parts.append(
-#     #         PartObject(
-#     #             key=seg.absolute_uri,
-#     #             duration= duration
-#     #         )
-#     #     )
-
-#     # return parts

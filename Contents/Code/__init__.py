@@ -17,10 +17,10 @@ def Start():
 
 ###################################################################################################
 def ValidatePrefs():
-
+    global token
     Log.Info("Attempting Login")
 
-    if Prefs['login'] and Prefs['username'] and Prefs['password']:
+    if not token and Prefs['login'] and Prefs['username'] and Prefs['password']:
         try:
             # Log.Info("Attempting Login with: %s and %s" % (Prefs['username'], Prefs['password']))
             token = api.authenticate(Prefs['username'], Prefs['password'])
@@ -39,8 +39,24 @@ def ValidatePrefs():
 ##########################################################################################
 @handler('/video/roosterteeth', TITLE, thumb = ICON, art = ART)
 def MainMenu():
-
+    global token
     oc = ObjectContainer()
+
+    if not token and Prefs['login'] and Prefs['username'] and Prefs['password']:
+        try:
+            # Log.Info("Attempting Login with: %s and %s" % (Prefs['username'], Prefs['password']))
+            token = api.authenticate(Prefs['username'], Prefs['password'])
+            Log.Info("Login success")
+            oc = ObjectContainer(
+                header = "Login success",
+                message = "You're now logged in!"
+            )
+        except AuthenticationError:
+            Log.Error("Could not authenticate, possibly incorrect username or password.")
+            oc = ObjectContainer(
+                header = "Login failure",
+                message = "Please check your username and password"
+            )
 
     oc.add(PrefsObject(title = "Preferences"))
 
@@ -124,6 +140,7 @@ def ShowSeasons(show):
 ##########################################################################################
 @route("/video/roosterteeth/channel/recent")
 def RecentEpisodes(channel):
+    global token
     oc = ObjectContainer(title2='Recent')
 
     Log.Info("Getting recent episodes for %s." % channel)
@@ -145,6 +162,7 @@ def RecentEpisodes(channel):
 ##########################################################################################
 @route("/video/roosterteeth/season/episodes")
 def SeasonEpisodes(season, **kwargs):
+    global token
     season = api.season(season)
     oc = ObjectContainer(title2='Season %d' % season.number)
 
